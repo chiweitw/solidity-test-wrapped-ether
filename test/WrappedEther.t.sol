@@ -8,7 +8,8 @@ contract WrappedEtherTest is Test {
     WrappedEther public weth;
     address user1;
     address user2;
-    uint256 msgValue;
+    uint256 depositAmount = 1 ether;
+    uint256 withdrawAmount = 1 ether;
 
     event Deposit(address indexed account, uint amount);
 
@@ -16,30 +17,23 @@ contract WrappedEtherTest is Test {
         weth = new WrappedEther();
         user1 = makeAddr("Alice");
         user2 = makeAddr("Bob");
-        msgValue = 1 ether;
-        // vm.startPrank(user1); // Set msg.sender for subsequent calls
-        // deal(user1, msgValue);  // set enough ether balance for user1 
-    }
-
-    function setDepositBase() public {
         vm.startPrank(user1); // Set msg.sender for subsequent calls
-        deal(user1, msgValue);  // set enough ether balance for user1 
-        weth.deposit{value: msgValue}(); // execute deposit
+        deal(user1, depositAmount);  // set enough ether balance for user1 
     }
 
     // 測項 1: deposit 應該將與 msg.value 相等的 ERC20 token mint 給 user
     function testDeposit() public {
-        setDepositBase();
+         weth.deposit{value: depositAmount}();
 
-        assertEq(weth.balanceOf(user1), msgValue);
+        assertEq(weth.balanceOf(user1), depositAmount);
         vm.stopPrank();
     }
 
     // 測項 2: deposit 應該將 msg.value 的 ether 轉入合約
     function testDepositETHtoContract() public {
-        setDepositBase();
+         weth.deposit{value: depositAmount}();
 
-        assertEq(address(weth).balance, msgValue);
+        assertEq(address(weth).balance, depositAmount);
         vm.stopPrank();
     }
 
@@ -47,18 +41,27 @@ contract WrappedEtherTest is Test {
     function testDepositEmitEvent() public {
         vm.expectEmit();
         
-        emit Deposit(user1, msgValue); // Emit the event expect to see
-        setDepositBase(); // Perform the call
+        emit Deposit(user1, depositAmount); // Emit the event expect to see
+        weth.deposit{value: depositAmount}(); // Perform the call
 
         vm.stopPrank();
     }
 
     // 測項 4: withdraw 應該要 burn 掉與 input parameters 一樣的 erc20 token
     function testWithdrawBurnERC20Token() public {
-        setDepositBase();
+         weth.deposit{value: depositAmount}();
         uint256 initTotalSupply = weth.totalSupply();
-        weth.withdraw(msgValue);
+        weth.withdraw(withdrawAmount);
 
-        assertEq(initTotalSupply - weth.totalSupply(), msgValue);
+        assertEq(initTotalSupply - weth.totalSupply(), withdrawAmount);
+    }
+
+    // 測項 5: withdraw 應該將 burn 掉的 erc20 換成 ether 轉給 user
+    function testWithdrawTransferEtherToUser() public {
+        weth.deposit{value: depositAmount}();
+        uint256 initBalance = user1.balance;
+        weth.withdraw(withdrawAmount);
+
+        assertEq(user1.balance - initBalance, withdrawAmount);
     }
 }
