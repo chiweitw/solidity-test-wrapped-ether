@@ -52,4 +52,13 @@ contract WrappedEtherTest is Test {
 
         vm.stopPrank();
     }
+
+    // 測項 4: withdraw 應該要 burn 掉與 input parameters 一樣的 erc20 token
+    function testWithdrawBurnERC20Token() public {
+        setDepositBase();
+        uint256 initTotalSupply = weth.totalSupply();
+        weth.withdraw(msgValue);
+
+        assertEq(initTotalSupply - weth.totalSupply(), msgValue);
+    }
 }
