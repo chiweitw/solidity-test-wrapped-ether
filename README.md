@@ -4,7 +4,7 @@ This project is designed for practicing writing tests using Foundry, with a simp
 
 ## Review Guide
 
-If you wish to review the project, please check the contract code in `/src/WrappedEther.sol` and the test code in `/test/WrappedEther.t.sol`.
+Please check the contract code in `/src/WrappedEther.sol` and the test code in `/test/WrappedEther.t.sol`.
 
 ## Getting Started
 
