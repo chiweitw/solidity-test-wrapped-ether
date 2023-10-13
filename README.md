@@ -1,66 +1,22 @@
-## Foundry
+# Solidity Test: Wrapped Ether
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This project is designed for practicing writing tests using Foundry, with a simple Wrapped Ether contract as an example.
 
-Foundry consists of:
+## Review Guide
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+If you wish to review the project, please check the contract code in `/src/WrappedEther.sol` and the test code in `/test/WrappedEther.t.sol`.
 
-## Documentation
+## Getting Started
 
-https://book.getfoundry.sh/
+Follow these steps to get started with the project:
 
-## Usage
+1. Make sure you have Foundry set up. If not, you can refer to the [installation guide](https://book.getfoundry.sh/getting-started/installation).
 
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+2. Run the following command to install the required dependencies:
+   ```bash
+   forge install
+   ```
+3. Run the following command to run the tests:
+   ```bash
+   forge test
+   ```
