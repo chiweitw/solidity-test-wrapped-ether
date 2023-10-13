@@ -8,7 +8,7 @@ contract WrappedEtherTest is Test {
     WrappedEther public weth;
     address user1;
     address user2;
-    uint256 amount = 1 ether; // amount for deposit, withdrawl, and transfer
+    uint256 amount = 1 ether; // general amount for tests
 
     event Deposit(address indexed account, uint amount);
     event Withdraw(address indexed account, uint amount);
@@ -76,6 +76,14 @@ contract WrappedEtherTest is Test {
         weth.deposit{value: amount}();
         weth.transfer(user2, amount);
         assertEq(weth.balanceOf(user2), amount);
+        vm.stopPrank();
+    }
+
+    // 測項 8: approve 應該要給他人 allowance
+    function testApprove() public {
+        weth.deposit{value: amount}();
+        weth.approve(user2, amount);
+        assertEq(weth.allowance(user1, user2), amount);
         vm.stopPrank();
     }
 }
