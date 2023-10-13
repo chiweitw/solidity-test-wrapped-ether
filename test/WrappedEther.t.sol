@@ -12,6 +12,8 @@ contract WrappedEtherTest is Test {
     uint256 withdrawAmount = 1 ether;
 
     event Deposit(address indexed account, uint amount);
+    event Withdraw(address indexed account, uint amount);
+
 
     function setUp() public {
         weth = new WrappedEther();
@@ -40,7 +42,6 @@ contract WrappedEtherTest is Test {
     // 測項 3: deposit 應該要 emit Deposit event
     function testDepositEmitEvent() public {
         vm.expectEmit();
-        
         emit Deposit(user1, depositAmount); // Emit the event expect to see
         weth.deposit{value: depositAmount}(); // Perform the call
 
@@ -63,5 +64,15 @@ contract WrappedEtherTest is Test {
         weth.withdraw(withdrawAmount);
 
         assertEq(user1.balance - initBalance, withdrawAmount);
+    }
+
+    // 測項 6: withdraw 應該要 emit Withdraw event
+    function testWithdrawEmitEvent() public {
+        weth.deposit{value: depositAmount}();
+        vm.expectEmit();
+        emit Withdraw(user1, withdrawAmount); // Emit the event expect to see
+        weth.withdraw(withdrawAmount); // Perform the call
+
+        vm.stopPrank();
     }
 }
