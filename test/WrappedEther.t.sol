@@ -10,6 +10,8 @@ contract WrappedEtherTest is Test {
     address user2;
     uint256 msgValue;
 
+    event Deposit(address indexed account, uint amount);
+
     function setUp() public {
         weth = new WrappedEther();
         user1 = makeAddr("Alice");
@@ -38,6 +40,16 @@ contract WrappedEtherTest is Test {
         setDepositBase();
 
         assertEq(address(weth).balance, msgValue);
+        vm.stopPrank();
+    }
+
+    // 測項 3: deposit 應該要 emit Deposit event
+    function testDepositEmitEvent() public {
+        vm.expectEmit();
+        
+        emit Deposit(user1, msgValue); // Emit the event expect to see
+        setDepositBase(); // Perform the call
+
         vm.stopPrank();
     }
 }
