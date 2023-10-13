@@ -4,7 +4,7 @@ pragma solidity ^0.8.18;
 // import ERC20 from openzeppelin
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract WETH is ERC20 {
+contract WrappedEther is ERC20 {
     constructor() ERC20("Wrapped Ether", "WETH") {}
 
     // Declare Deposit and Withdraw Event. When an event is emitted, it stores the arguments passed in transaction logs.
