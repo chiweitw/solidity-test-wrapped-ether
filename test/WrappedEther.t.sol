@@ -86,4 +86,12 @@ contract WrappedEtherTest is Test {
         assertEq(weth.allowance(user1, user2), amount);
         vm.stopPrank();
     }
+
+    // 測項 9: transferFrom 應該要可以使用他人的 allowance
+    function testTransferFrom() public {
+        testApprove();
+        vm.startPrank(user2); // switch to user2
+        assertTrue(weth.transferFrom(user1, user2, amount));
+        vm.stopPrank();
+    }
 }
