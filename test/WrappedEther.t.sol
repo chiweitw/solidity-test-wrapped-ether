@@ -13,7 +13,6 @@ contract WrappedEtherTest is Test {
     event Deposit(address indexed account, uint amount);
     event Withdraw(address indexed account, uint amount);
 
-
     function setUp() public {
         weth = new WrappedEther();
         user1 = makeAddr("Alice");
@@ -92,6 +91,16 @@ contract WrappedEtherTest is Test {
         testApprove();
         vm.startPrank(user2); // switch to user2
         assertTrue(weth.transferFrom(user1, user2, amount));
+        vm.stopPrank();
+    }
+
+    // 測項 10: transferFrom 後應該要減除用完的 allowance
+    function testTransFormAllowanceChange() public {
+        testApprove();
+        vm.startPrank(user2); // switch to user2
+        uint256 initAllowance = weth.allowance(user1, user2); // check initial allowance
+        weth.transferFrom(user1, user2, amount);
+        assertEq(initAllowance - weth.allowance(user1, user2), amount);
         vm.stopPrank();
     }
 }
