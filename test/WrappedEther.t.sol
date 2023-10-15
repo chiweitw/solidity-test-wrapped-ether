@@ -12,6 +12,8 @@ contract WrappedEtherTest is Test {
 
     event Deposit(address indexed account, uint amount);
     event Withdraw(address indexed account, uint amount);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     function setUp() public {
         weth = new WrappedEther();
@@ -101,6 +103,55 @@ contract WrappedEtherTest is Test {
         uint256 initAllowance = weth.allowance(user1, user2); // check initial allowance
         weth.transferFrom(user1, user2, amount);
         assertEq(initAllowance - weth.allowance(user1, user2), amount);
+        vm.stopPrank();
+    }
+
+    // test deposit - revert deposit when insufficient fund
+    function testDepositInsufficientFund() public {
+        vm.expectRevert();
+        weth.deposit{value: amount + 1}();
+        vm.stopPrank();
+    }
+
+    // test withdraw - revert withdraw when insufficient fund
+    function testWithdrawlInsufficientFund() public {
+        weth.deposit{value: amount}();
+        vm.expectRevert();
+        weth.withdraw(amount + 1);
+    }
+
+    // test approve -  should emit event
+    function testApproveEmitEvent() public {
+        weth.deposit{value: amount}();
+        vm.expectEmit();
+        emit Approval(user1, user2, amount);
+        weth.approve(user2, amount);
+        vm.stopPrank();
+    }
+
+    // test transfer -  should emit event
+    function testTransferEmitEvent() public {
+        weth.deposit{value: amount}();
+        vm.expectEmit();
+        emit Transfer(user1, user2, amount);
+        weth.transfer(user2, amount);
+        vm.stopPrank();
+    }
+
+    // test transfer - revert when balance not anough
+    function testTransferInsufficientBalance() public {
+        weth.deposit{value: amount}();
+        vm.expectRevert();
+        weth.transfer(user2, amount + 1);
+        vm.stopPrank();
+    }
+
+    // test transfrom - revert when allowance not enough
+    function testTransfromInsufficientAllowance() public {
+        testApprove();
+        vm.startPrank(user2);
+        vm.expectRevert();
+        weth.transferFrom(user1, user2, amount + 1);
         vm.stopPrank();
     }
 }
