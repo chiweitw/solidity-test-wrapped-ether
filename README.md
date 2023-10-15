@@ -1,14 +1,12 @@
 # Solidity Test: Wrapped Ether
 
-This project is designed for practicing writing tests using Foundry, with a simple Wrapped Ether contract as an example.
+For practice writing tests for a simple Wrapped Ether contract using [Foundry](https://github.com/foundry-rs/foundry).
 
-## Review Guide
+## Code
 
-Please check the contract code in `/src/WrappedEther.sol` and the test code in `/test/WrappedEther.t.sol`.
+The contract code is located in `/src/WrappedEther.sol`, and the test code is in `/test/WrappedEther.t.sol`.
 
-## Getting Started
-
-Follow these steps to get started with the project:
+## Running the Tests
 
 1. Make sure you have Foundry set up. If not, you can refer to the [installation guide](https://book.getfoundry.sh/getting-started/installation).
 
@@ -20,3 +18,5 @@ Follow these steps to get started with the project:
    ```bash
    forge test
    ```
+## Test Results
+   <img width="1019" alt="image" src="https://github.com/chiweitw/solidity-test-wrapped-ether/assets/34131145/54449158-6eb4-4557-bd8d-df7efb52c930">
